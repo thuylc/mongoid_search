@@ -36,6 +36,7 @@ module Mongoid::Search::Util
     stem_proc     = Mongoid::Search.stem_proc
 
     return [] if text.blank?
+    orginal_text = text;
     text = text.to_s.
       mb_chars.
       normalize(:kd).
@@ -48,6 +49,7 @@ module Mongoid::Search::Util
       reject { |word| word.size < Mongoid::Search.minimum_word_size }
     text = text.reject { |word| ignore_list.include?(word) } unless ignore_list.blank?
     text = text.map(&stem_proc) if stem_keywords
+    text << orginal_text
     text
   end
 
